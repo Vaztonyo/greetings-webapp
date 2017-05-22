@@ -1,0 +1,25 @@
+{
+  "name": "greetings-webapp",
+  "version": "1.0.0",
+  "description": "greetings",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vaztonyo/greetings-webapp.git"
+  },
+  "keywords": [
+    "greet/greeted"
+  ],
+  "author": "Vaztonyo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Vaztonyo/greetings-webapp/issues"
+  },
+  "homepage": "https://github.com/Vaztonyo/greetings-webapp#readme",
+  "dependencies": {
+    "express": "^4.15.3"
+  }
+}
