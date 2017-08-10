@@ -1,0 +1,19 @@
+{{>header}}
+
+<br><br><br></br>
+
+<div class="input" align="center">
+  <p class="count" name="counter">Counter: 0</p>
+<form class="" action="/greetings" method="post">
+
+    <input type="text" class="name" name="id" placeholder="Enter Your Name" value=""></input><br>
+    <input type="radio" class="lang" name="language" value="english"><label for="english">English</label></input>
+    <input type="radio" class="lang"name="language" value="afrikaans"><label for="afrikaans">Afrikaans</label></input>
+    <input type="radio" class="lang" name="language" value="xhosa"><label for="xhosa">Xhosa</label></input>
+    <input type="submit" class="greetButton" name="submit" value="Submit"></input>
+
+  </form>
+  <p class="outp">{{output}}</p>
+</div><br><br></br>
+
+{{>footer}}

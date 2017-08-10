@@ -1,48 +1,117 @@
+'use strict';
+//***************Require All Needed Modules***************
 var express = require('express');
+var exphbs = require('express-handlebars');
 var bodyParser = require('body-parser');
-var exphbs  = require('express-handlebars');
+var session = require('express-session');
 
 var app = express();
 
-app.engine('handlebars', exphbs({defaultLayout: 'main'}));
+app.set('trust proxy', 1) // trust first proxy
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}))
+
+app.engine('handlebars', exphbs({ // set the app engine to handlebars
+    defaultLayout: 'main' // set the default layout to main
+}));
 app.set('view engine', 'handlebars');
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+// app.use(bodyParser.json());
 
-var greetNames = {};
+app.use(bodyParser.urlencoded({ //use body-parser
+    extended: false
+}));
 
-app.use(express.static('public'));
 
+app.use(express.static('public')); //use static and set it to public
+app.use(express.static('views')); //use static views
 
-app.get('/greetings/:id', function(pers, res){
-  if (greetNames[pers.params.id]) {
-    greetNames[pers.params.id]++;
+var greetedNames = [];
+
+app.get('/greetings', function(req, res, next) {
+  res.render('greetings');
+})
+
+app.get('/greeted', function(req, res, next) {
+    res.render('greeted');
+  });
+
+app.get('/counter', function(req, res, next) {
+    res.render('counter');
+  });
+
+app.post('/greetings', function(req, res, next){
+  var greetButton = req.body.greetButton;
+  var id = req.body.id;
+  var lang = req.body.language;
+  var output = req.body.output
+  // console.log(lang);
+
+  var message = "";
+
+  if(lang === "english"){
+    message = "Hello, " + id;
   }
-  else {
-    greetNames[pers.params.id] = 1;
+  else if(lang === "afrikaans"){
+    message = "Goeie dag, " + id;
   }
-  res.send("<h2><u>Hello, " + pers.params.id);
-});
-
-app.get('/greeted', function(pers, res){
-  var namesGreeted = [];
-  for(id in greetNames){
-    namesGreeted.push(id);
+  else{
+    message = "Molo, " + id;
   }
-  res.send("Names Greeted:  " + namesGreeted);
+
+if (id !== "" && lang) {
+  greetedNames.push(id);
+  var  greetMessage = message;
+  // var message = "<h2><u>Hello, " + greetedNames[req.params.id];
+}
+// console.log(greetedNames);
+
+var data = {
+  output: greetMessage
+}
+  res.render('greetings', data);
 });
 
-app.get('/counter/:id', function(pers, res){
-  var count = greetNames[pers.params.id];
-      res.send("Hello,  " + pers.params.id + " has been greeted " + count + " time(s).");
+app.post('/greeted', function(req, res, next) {
+  var greetedN = req.body.greetedN;
+
+    var namesGreeted = [];
+    for (id in greetedNames) {
+      if (greetedNames[req.params.id]) {
+          greetedNames[req.params.id]++;
+      } else {
+          greetedNames[req.params.id] = 1;
+      }
+        namesGreeted.push(id);
+    }
+    console.log(namesGreeted);
+var data1 = {
+  greetedN : namesGreeted
+}
+    res.render('greeted',data1);
 });
 
-var server = app.listen(3000, function() {
+app.post('/counter', function(req, res, next) {
+    var count = greetedNames[req.params.id];
+    res.render("Hello,  " + req.params.id + " has been greeted " + count + " time(s).");
+});
 
- var host = server.address().address;
- var port = server.address().port;
+var server = app.listen(5500, function() {
 
- console.log('Example app listening at http://%s:%s', host, port);
+    var host = server.address().address;
+    var port = server.address().port;
+
+    console.log('App listening at http://%s:%s', host, port);
 
 });
+
+
+// if (greetedNames[req.params.id]) {
+//     greetedNames[req.params.id]++;
+// } else {
+//     greetedNames[req.params.id] = 1;
+// }
