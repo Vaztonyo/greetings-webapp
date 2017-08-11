@@ -21,16 +21,16 @@ app.engine('handlebars', exphbs({ // set the app engine to handlebars
 app.set('view engine', 'handlebars');
 
 // app.use(bodyParser.json());
-
 app.use(bodyParser.urlencoded({ //use body-parser
     extended: false
 }));
 
-
 app.use(express.static('public')); //use static and set it to public
 app.use(express.static('views')); //use static views
 
+
 var greetedNames = [];
+var count = 0;
 
 app.get('/greetings', function(req, res, next) {
   res.render('greetings');
@@ -45,11 +45,9 @@ app.get('/counter', function(req, res, next) {
   });
 
 app.post('/greetings', function(req, res, next){
-  var greetButton = req.body.greetButton;
   var id = req.body.id;
   var lang = req.body.language;
-  var output = req.body.output
-  // console.log(lang);
+  var counter = req.body.counter;
 
   var message = "";
 
@@ -62,16 +60,34 @@ app.post('/greetings', function(req, res, next){
   else{
     message = "Molo, " + id;
   }
+  if (id !== "" && lang) {
+    // greetedNames.push(id);
+    var  greetMessage = message;
+  }
 
-if (id !== "" && lang) {
-  greetedNames.push(id);
-  var  greetMessage = message;
-  // var message = "<h2><u>Hello, " + greetedNames[req.params.id];
-}
-// console.log(greetedNames);
+  var nameExist = false;
+  for(id in greetedNames){
+    var nameFound = greetedNames[id];
+    if(nameFound === id){
+      nameExist = true;
+      break;
+    }
+  }
+    if (!nameExist) {
+      greetedNames.push(id);
+    }
+    if (nameExist === false) {
+      count++;
+    }
+    else if(nameExist === true){
+      ;
+    }
+
+console.log(count);
 
 var data = {
-  output: greetMessage
+  output: greetMessage,
+  counter: count
 }
   res.render('greetings', data);
 });
@@ -81,11 +97,11 @@ app.post('/greeted', function(req, res, next) {
 
     var namesGreeted = [];
     for (id in greetedNames) {
-      if (greetedNames[req.params.id]) {
-          greetedNames[req.params.id]++;
-      } else {
-          greetedNames[req.params.id] = 1;
-      }
+      // if (greetedNames[req.params.id]) {
+      //     greetedNames[req.params.id]++;
+      // } else {
+      //     greetedNames[req.params.id] = 1;
+      // }
         namesGreeted.push(id);
     }
     console.log(namesGreeted);

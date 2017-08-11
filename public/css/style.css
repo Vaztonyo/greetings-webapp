@@ -45,11 +45,11 @@ header {
 	width: 125px;
 }
 
-.count{
+.counter{
 	font-family: "Raleway";
 	font-size: 28px;
 	color: black;
-	text-shadow: 8px 4px 7px white;
+	text-shadow: 0 0 3px #FF0000, 0 0 5px #0000FF;
 	width: 150px;
 	background-color: transparent;
 	box-shadow: 0 7px 20px 0 yellow;
@@ -59,10 +59,10 @@ header {
 .outp{
 	font-family: "Raleway";
 	font-size: 28px;
-	color: white;
-  text-shadow: text-shadow: 0 0 3px #FF0000, 0 0 5px #0000FF;
+	color: black;
+  text-shadow: 0 0 3px #FF0000, 0 0 5px #0000FF;
 	width: 250px;
-	background-color: #185;
+	background-color: transparent;
  	box-shadow: 0 7px 20px 0 yellow, 0 8px 28px 0 yellow;
  	text-align: center;
 }
