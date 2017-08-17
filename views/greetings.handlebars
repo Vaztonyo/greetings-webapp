@@ -1,16 +1,25 @@
 {{>header}}
 
-<br><br><br></br>
+<br><br><br><br></br>
 
 <div class="input" align="center">
-  <p class="counter" name="counter"><label for="counter">Counter:</label>{{counter}}</p>
 <form class="" action="/greetings" method="post">
+  <p class="counter" name="counter"><label for="counter">Counter:</label>{{counter}}</p><br>
 
-    <input type="text" class="name" name="id" placeholder="Enter Your Name" value=""></input><br>
-    <input type="radio" class="lang" name="language" value="english"><label for="english">English</label></input>
-    <input type="radio" class="lang"name="language" value="afrikaans"><label for="afrikaans">Afrikaans</label></input>
-    <input type="radio" class="lang" name="language" value="xhosa"><label for="xhosa">Xhosa</label></input>
-    <input type="submit" class="greetButton" name="submit" value="Submit"></input>
+  <a href="/greeted">View Greeted Names</a><br><br>
+    <input type="text" class="name" name="id" placeholder="Enter Your Name" value=""></input><br><br>
+
+    <label class="radio-inline">
+      <input type="radio" class="lang" name="language" value="english"><b>English
+    </label>
+    <label class="radio-inline">
+      <input type="radio" class="lang"name="language" value="afrikaans"><b>Afrikaans</b>
+    </label>
+    <label class="radio-inline">
+      <input type="radio" class="lang" name="language" value="xhosa"><b>Xhosa</b>
+    </label><br><br>
+
+    <input type="submit" class="greetButton" name="submit" value="Submit"></input><br><br><br></br>
 
   </form>
   <p class="outp">{{output}}</p>

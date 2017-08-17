@@ -1,24 +1,29 @@
 html, body {
 	margin: auto;
 	padding: auto;
-	background-color: 33CCCC;
+	background: linear-gradient(to left, lightblue, lightblue, silver, silver);
 }
 
 footer{
 	margin: auto;
-	/*background-color: black;*/
+}
+
+.radio-inline{
+	clear: none;
+	display: inline;
+	color: black;
+	font-size: 20px;
+	text-shadow: 0 0 3px #FF0000, 0 0 5px #0000FF;
 }
 
 .row-2{
-  background-color: 0033CC;
+  background-color: dodgerblue;
 	position: fixed;
   top: 0;
 	width: 100%;
 	height: 80px;
 	margin: auto;
 	display: flex;
-	align-items: center;
-	justify-content: center;
 }
 
 header {
@@ -27,7 +32,7 @@ header {
 }
 
 .row-1{
-  background-color: 0033CC;
+  background-color: dodgerblue;
   position: fixed;
   bottom: 0;
   color: white;
@@ -40,9 +45,10 @@ header {
 
 .greetButton:hover{
 	background-color: navy;
+	color: white;
 	margin: 5px;
-	height: 55px;
-	width: 125px;
+	height: 45px;
+	width: 85px;
 }
 
 .counter{
@@ -52,18 +58,18 @@ header {
 	text-shadow: 0 0 3px #FF0000, 0 0 5px #0000FF;
 	width: 150px;
 	background-color: transparent;
-	box-shadow: 0 7px 20px 0 yellow;
+	box-shadow: 0 7px 20px 0 red;
 	text-align: center;
 }
 
 .outp{
 	font-family: "Raleway";
-	font-size: 28px;
+	font-size: 32px;
 	color: black;
   text-shadow: 0 0 3px #FF0000, 0 0 5px #0000FF;
-	width: 250px;
+	width: 350px;
 	background-color: transparent;
- 	box-shadow: 0 7px 20px 0 yellow, 0 8px 28px 0 yellow;
+ 	box-shadow: 0 7px 20px 0 red, 0 8px 28px 0 red;
  	text-align: center;
 }
 
@@ -202,7 +208,7 @@ body {
   font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #222; }
 footer {
-  background-color: 0033CC;
+  background-color: dodgerblue;
 }
 
 /* Typography
@@ -248,9 +254,9 @@ input[type="submit"],
 input[type="reset"],
 input[type="button"] {
   display: inline-block;
-  height: 34px;
+  height: 36px;
   padding: 0 20px;
-  color: #555;
+  color: black;
   text-align: center;
   font-size: 11px;
   font-weight: 600;
@@ -259,9 +265,9 @@ input[type="button"] {
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
-  background-color: silver;
+  background-color: lightseagreen;
   border-radius: 8px;
-  border: 2px solid #bbb;
+  border: 2px solid black;
   cursor: pointer;
   box-sizing: border-box; }
 .button:hover,
@@ -274,9 +280,9 @@ button:focus,
 input[type="submit"]:focus,
 input[type="reset"]:focus,
 input[type="button"]:focus {
-  color: #333;
-  border-color: #888;
-  outline: 0; }
+  color: white;
+  border-color: black;
+  outline: inherit; }
 .button.button-primary,
 button.button-primary,
 input[type="submit"].button-primary,
