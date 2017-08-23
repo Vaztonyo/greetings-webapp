@@ -1,12 +1,13 @@
 'use strict';
 //Require All Needed Modules
-var express = require('express');
-var exphbs = require('express-handlebars');
-var bodyParser = require('body-parser');
-var session = require('express-session');
-var flash = require('express-flash');
+const express = require('express');
+const exphbs = require('express-handlebars');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const flash = require('express-flash');
 
-var app = express();
+
+const app = express();
 
 app.set('trust proxy', 1) // trust first proxy
 app.use(session({
@@ -46,7 +47,7 @@ app.get('/counter', function(req, res, next) {
 });
 
 var greetedNames = [];
-var count = 0;
+// var count = 0;
 
 //create a post for the greetings page
 app.post('/greetings', function(req, res, next) {
@@ -84,7 +85,7 @@ app.post('/greetings', function(req, res, next) {
         greetedNames.push(enteredName);
     }
 
-    console.log(count);
+    // console.log(count);
 
     var data = {
         output: message,
@@ -120,6 +121,8 @@ var server = app.listen(5500, function() {
     console.log('App listening at http://%s:%s', host, port);
 
 });
+
+//deploy to Heroku
 
 
 // if (greetedNames[req.params.id]) {
