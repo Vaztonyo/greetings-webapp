@@ -6,7 +6,7 @@
 <form class="" action="/greetings" method="post">
   <p class="counter" name="counter"><label for="counter">Counter:</label>{{counter}}</p><br>
 
-  <!-- <a href="/greeted">View Greeted Names</a><br><br> -->
+  <a href="/greeted">View Greeted Names</a><br><br>
     <input type="text" class="name" name="id" placeholder="Enter Your Name" value=""></input><br><br>
 
     <label class="radio-inline">
@@ -22,9 +22,13 @@
     <input type="submit" class="greetButton" name="submit" value="Submit"></input><br><br><br></br>
 
   </form>
-  <p class="outp">{{output}}</p>
+  <p class="outp">{{output}}</p><br>
+
+  {{#if messages.error}}
+  <div class="error">
+    {{messages.error}}
+  </div>
+  {{/if}}
 </div><br><br></br>
 
 {{>footer}}
-
-<!-- deploy to Heroku -->

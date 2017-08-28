@@ -28,6 +28,9 @@
     "express-flash": "git://github.com/RGBboy/express-flash.git",
     "express-handlebars": "^3.0.0",
     "express-session": "^1.15.5",
+    "heroku": "^0.2.0",
+    "mongodb": "^2.2.31",
+    "mongoose": "^4.11.8",
     "node": "^8.3.0"
   },
   "devDependencies": {

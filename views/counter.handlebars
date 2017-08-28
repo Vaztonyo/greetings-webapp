@@ -1,11 +1,16 @@
 {{>header}}
-
+<br><br><br></br>
 <div class="counter_Name">
+  <a href='/greetings'>Greet more peeps</a>| |
+  <a href="/greeted" align="center">View Greeted Names</a>
 
   <h1>Counter For Greeted Names:</h1><br>
-
+  <h3>
+    {{#each greetedNames}}
+    {{this}} has been greeted {{count}} times.
+    {{/each}}
+  </h3>
 </div>
+<br><br>
 
 {{>footer}}
-
-<!-- deploy to Heroku -->

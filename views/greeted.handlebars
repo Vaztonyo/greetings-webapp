@@ -1,17 +1,15 @@
 {{>header}}
 
-<div class="greeted_Names"><br><br><br></br>
-
+<div class="greeted" align="center"><br><br><br></br>
+  <a href='/greetings'>greet more peeps</a>
   <p><h1 align="center"><u>Names That Have Been Greeted:</u></h1></p><br>
-
-<tbody align="center">
-  {{#each greeted}}
-  <li>{{greetedN}}</li>
+<tbody>
+  <h3>
+  {{#each name}}
+  <ul>{{this}}</ul>
   {{/each}}
+</h3>
 </tbody>
 </div>
 
 {{>footer}}
-
-
-<!-- deploy to Heroku -->
