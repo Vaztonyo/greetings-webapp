@@ -6,9 +6,9 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const flash = require('express-flash');
 
-const Models = require('./models');
-
-const models = Models('mongodb://localhost/greetings');
+// const Models = require('./models');
+//
+// const models = Models('mongodb://localhost/greetings');
 
 var app = express();
 
@@ -49,11 +49,11 @@ app.get('/greeted', function(req, res, next) {
     res.render('greeted', data);
 });
 
-app.get('/counter', function(req, res, next) {
-
-
-    res.render('counter');
-});
+// app.get('/counter', function(req, res, next) {
+//
+//
+//     res.render('counter');
+// });
 
 
 //create a post for the greetings page
@@ -125,7 +125,7 @@ app.post('/greetings', function(req, res, next) {
 
 
 
-var server = app.listen(process.env.PORT || 5500, function() {
+var server = app.listen(process.env.PORT || 5000, function() {
 
     var host = server.address().address;
     var port = server.address().port;
