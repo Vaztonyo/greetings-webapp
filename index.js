@@ -119,10 +119,10 @@ app.post('/greetings', function(req, res, next) {
 });
 
 app.get('/', function(req, res) {
-    res.redirect('/greetings')
-})
+    res.redirect('/greetings');
+});
 
-var server = app.listen(5000, function() {
+var server = app.listen(process.env.PORT || 5000, function() {
 
     var host = server.address().address;
     var port = server.address().port;
