@@ -6,6 +6,9 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const flash = require('express-flash');
 
+const Models = require('./models');
+
+const models = Models('mongodb://localhost/greetings');
 
 var app = express();
 
@@ -55,20 +58,37 @@ app.get('/counter', function(req, res, next) {
 
 //create a post for the greetings page
 app.post('/greetings', function(req, res, next) {
-    var enteredName = req.body.id;
+    var enteredName = {
+      name : req.body.id
+    };
+
     var lang = req.body.language;
-    var counter = req.body.counter;
 
     var message = "";
     var nameExist = false;
 
-    if (lang === "english" && enteredName !== "") {
-        message = "Hello, " + enteredName;
-    } else if (lang === "afrikaans" && enteredName !== "") {
-        message = "Goeie dag, " + enteredName;
-    } else if(lang === "xhosa" && enteredName !== ""){
-        message = "Molo, " + enteredName;
+    if (lang === "english" && enteredName.name !== "") {
+        message = "Hello, " + enteredName.name;
+    } else if (lang === "afrikaans" && enteredName.name !== "") {
+        message = "Goeie dag, " + enteredName.name;
+    } else if(lang === "xhosa" && enteredName.name !== ""){
+        message = "Molo, " + enteredName.name;
     }
+
+    else if (enteredName.name === ""){
+      req.flash('error', 'Please Enter a Name!');
+    }
+
+    else if (!lang){
+      req.flash('error', 'Please Choose a Language!');
+    }
+
+    // models.Name.create(enteredName, function(err, results){
+    //     if(err){
+    //     return next(err);
+    //     }
+    //     req.flash('error', 'Name Has Been Added!');
+    // })
 
     var foundName = false;
     // console.log(greetedNames);
@@ -76,7 +96,7 @@ app.post('/greetings', function(req, res, next) {
         var currentName = greetedNames[id];
         // console.log(currentName);
 
-        var namesMatched = currentName.trim() === enteredName.trim();
+        var namesMatched = currentName.trim() === enteredName.name.trim();
         // console.log(namesMatched);
 
         if (namesMatched) {
@@ -85,12 +105,13 @@ app.post('/greetings', function(req, res, next) {
         }
     }
     // console.log(foundName);
-    if (!foundName && enteredName !== "" && lang) {
-        greetedNames.push(enteredName);
+    if (!foundName && enteredName.name !== "" && lang) {
+        greetedNames.push(enteredName.name);
+        req.flash('error', 'Name Has Been Added!');
     }
 
-    else {
-      req.flash('error', 'Name already exists!');
+    else if(foundName === true) {
+      req.flash('error', ' Name already exists!');
     }
 
     // console.log(count);
@@ -102,38 +123,18 @@ app.post('/greetings', function(req, res, next) {
     res.render('greetings', data);
 });
 
-// app.post('/greeted', function(req, res, next) {
-// //  console.log(res);
-//     // var greetedNam = req.body.greetedNam;
-//     // console.log(greetedNam);
-//     //
-//     // var namesGreeted = [];
-//     //
-//     // for (id in greetedNames){
-//     //   namesGreeted.push(greetedNames);
-//     // }
-//     // console.log(namesGreeted);
-//     // var data1 = {
-//     //     greetedNam: greetedNames
-//     // }
-// //var greetedNames =['Test1','Test2'];
-//
-//     res.render('greeted');
-// });
 
-// app.post('/counter', function(req, res, next) {
-//     var count = greetedNames[req.params.id];
-//     res.render("Hello,  " + req.params.id + " has been greeted " + count + " time(s).");
-// });
 
-var server = app.listen(5500, function() {
+var server = app.listen(process.env.PORT || 5500, function() {
 
     var host = server.address().address;
     var port = server.address().port;
 
-    console.log('App listening at http://%s:%s', host, port);
+    console.log('App starts at http://%s:%s', host, port);
 
 });
+
+//deploy using heroku
 
 // if (greetedNames[req.params.id]) {
 //     greetedNames[req.params.id]++;

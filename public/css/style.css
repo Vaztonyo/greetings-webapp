@@ -75,8 +75,13 @@ header {
  	text-align: center;
 }
 
-.error{
-	color: red;
+a{
+	font-size: 20px;
+	font-weight: bolder;
+}
+
+.msg1{
+	color: green;
 }
 
 /*
