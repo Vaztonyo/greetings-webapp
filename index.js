@@ -21,6 +21,7 @@ app.use(session({
         secure: true
     }
 }))
+
 app.use(flash());
 
 app.engine('handlebars', exphbs({ // set the app engine to handlebars
@@ -43,9 +44,9 @@ app.get('/greetings', function(req, res, next) {
 })
 
 app.get('/greeted', function(req, res, next) {
-  var data = {
-    name : greetedNames
-  }
+    var data = {
+        name: greetedNames
+    }
     res.render('greeted', data);
 });
 
@@ -59,7 +60,7 @@ app.get('/greeted', function(req, res, next) {
 //create a post for the greetings page
 app.post('/greetings', function(req, res, next) {
     var enteredName = {
-      name : req.body.id
+        name: req.body.id
     };
 
     var lang = req.body.language;
@@ -71,16 +72,12 @@ app.post('/greetings', function(req, res, next) {
         message = "Hello, " + enteredName.name;
     } else if (lang === "afrikaans" && enteredName.name !== "") {
         message = "Goeie dag, " + enteredName.name;
-    } else if(lang === "xhosa" && enteredName.name !== ""){
+    } else if (lang === "xhosa" && enteredName.name !== "") {
         message = "Molo, " + enteredName.name;
-    }
-
-    else if (enteredName.name === ""){
-      req.flash('error', 'Please Enter a Name!');
-    }
-
-    else if (!lang){
-      req.flash('error', 'Please Choose a Language!');
+    } else if (enteredName.name === "") {
+        req.flash('error', 'Please Enter a Name!');
+    } else if (!lang) {
+        req.flash('error', 'Please Choose a Language!');
     }
 
     // models.Name.create(enteredName, function(err, results){
@@ -108,10 +105,8 @@ app.post('/greetings', function(req, res, next) {
     if (!foundName && enteredName.name !== "" && lang) {
         greetedNames.push(enteredName.name);
         req.flash('error', 'Name Has Been Added!');
-    }
-
-    else if(foundName === true) {
-      req.flash('error', ' Name already exists!');
+    } else if (foundName === true) {
+        req.flash('error', ' Name already exists!');
     }
 
     // console.log(count);
@@ -123,9 +118,11 @@ app.post('/greetings', function(req, res, next) {
     res.render('greetings', data);
 });
 
+app.get('/', function(req, res) {
+    res.redirect('/greetings')
+})
 
-
-var server = app.listen(process.env.PORT || 5000, function() {
+var server = app.listen(5000, function() {
 
     var host = server.address().address;
     var port = server.address().port;
