@@ -39,7 +39,7 @@ app.use(express.static('views')); //use static views
 
 var greetedNames = [];
 
-app.get('/greetings', function(req, res, next) {
+app.get('/', function(req, res, next) {
     res.render('greetings');
 })
 
@@ -58,7 +58,7 @@ app.get('/greeted', function(req, res, next) {
 
 
 //create a post for the greetings page
-app.post('/greetings', function(req, res, next) {
+app.post('/', function(req, res, next) {
     var enteredName = {
         name: req.body.id
     };
@@ -118,8 +118,8 @@ app.post('/greetings', function(req, res, next) {
     res.render('greetings', data);
 });
 
-app.get('/', function(req, res) {
-    res.redirect('/greetings');
+app.get('/greetings', function(req, res) {
+    res.redirect('/');
 });
 
 var server = app.listen(process.env.PORT || 5000, function() {
