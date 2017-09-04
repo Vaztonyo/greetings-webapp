@@ -6,9 +6,11 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const flash = require('express-flash');
 
-// const Models = require('./models');
-//
-// const models = Models('mongodb://localhost/greetings');
+const Models = require('./models');
+
+const mongoURL = process.env.MONGO_DB_URL || "mongodb://localhost/greetings";
+
+const models = Models(mongoURL);
 
 var app = express();
 
@@ -37,24 +39,55 @@ app.use(bodyParser.urlencoded({ //use body-parser
 app.use(express.static('public')); //use static and set it to public
 app.use(express.static('views')); //use static views
 
-var greetedNames = [];
+var format = require('util').format;
+
+var sessionNames = [];
+var counter = 0;
+
+const NamesGreeted = models.Name;
 
 app.get('/', function(req, res, next) {
-    res.render('greetings');
-})
 
-app.get('/greeted', function(req, res, next) {
-    var data = {
-        name: greetedNames
-    }
-    res.render('greeted', data);
+  NamesGreeted.distinct('name', function(err, results){
+    if (sessionNames[0] !== undefined){
+      var lastName = sessionNames.length - 1;
+      var namesForGreetingb = sessionNames[lastName].name;
+    };
+    counter = results.length;
+    res.render('greetings', {
+      count : counter
+      });
+    });
 });
 
-// app.get('/counter', function(req, res, next) {
-//
-//
-//     res.render('counter');
-// });
+app.get('/greeted', function(req, res, next) {
+    models.Name.find({}, function(err, greetings){
+      if (err){
+        return next(err);
+      }
+      res.render('greeted', {greetings});
+    });
+});
+
+app.get('/greeted/:name', function(req, res, next) {
+  NamesGreeted.findOne({
+    name: req.params.name
+  }, function(err, greetings){
+    if (err) {
+      return next(err);
+    } else {
+      if (greetings) {
+        var resultOfSearchedName = 'Hi, ' + greetings.name + ". You have been greeted " + greetings.individualCount + ' time(s).'
+      } else {
+        var resultOfSearchedName = "Oops!, we don't know this person!"
+      }
+    }
+
+    res.render('counter', {
+      resultOfSearchedName
+    });
+  });
+});
 
 
 //create a post for the greetings page
@@ -63,10 +96,16 @@ app.post('/', function(req, res, next) {
         name: req.body.id
     };
 
+    sessionNames.push({enteredName});
+
+    var submit = req.body.submitBtn;
+    var reset = req.body.resetBtn;
     var lang = req.body.language;
 
     var message = "";
     var nameExist = false;
+
+    var requiredVal = lang && enteredName.name !== "";
 
     if (lang === "english" && enteredName.name !== "") {
         message = "Hello, " + enteredName.name;
@@ -74,48 +113,63 @@ app.post('/', function(req, res, next) {
         message = "Goeie dag, " + enteredName.name;
     } else if (lang === "xhosa" && enteredName.name !== "") {
         message = "Molo, " + enteredName.name;
-    } else if (enteredName.name === "") {
+    } else if (enteredName.name === "" && submit) {
         req.flash('error', 'Please Enter a Name!');
-    } else if (!lang) {
+    } else if (!lang && submit) {
         req.flash('error', 'Please Choose a Language!');
     }
 
-    // models.Name.create(enteredName, function(err, results){
-    //     if(err){
-    //     return next(err);
-    //     }
-    //     req.flash('error', 'Name Has Been Added!');
-    // })
+    if (submit && requiredVal) {
 
-    var foundName = false;
-    // console.log(greetedNames);
-    for (var id in greetedNames) {
-        var currentName = greetedNames[id];
-        // console.log(currentName);
+    NamesGreeted.findOne({
+      name: req.body.id
+    }, function(err, searchName) {
+      if (err) {
+        return next(err)
+      } else {
+        if (!searchName && (req.body.id !== "")) {
+          var newName = new NamesGreeted({
+            name: req.body.id,
+            individualCount: 1
+          });
+          newName.save(function(err, results) {
+            if (err) {
+              return next(err);
+            }
+            console.log('results', results);
+          })
+        } else {
 
-        var namesMatched = currentName.trim() === enteredName.name.trim();
-        // console.log(namesMatched);
-
-        if (namesMatched) {
-            foundName = true;
-            break;
+          NamesGreeted.update({
+            name: req.body.id
+          }, {
+            $inc: {
+              individualCount: 1
+            }
+          }, function(err) {
+            if (err) {}
+          });
         }
-    }
-    // console.log(foundName);
-    if (!foundName && enteredName.name !== "" && lang) {
-        greetedNames.push(enteredName.name);
-        req.flash('error', 'Name Has Been Added!');
-    } else if (foundName === true) {
-        req.flash('error', ' Name already exists!');
-    }
+      }
+    });
 
-    // console.log(count);
+  }
+
+else  if (reset) {
+    NamesGreeted.remove({}, function(err){
+      if(err){
+        return next(err);
+      }
+    });
+  }
+    models.Name.count(function(err, counter) {
 
     var data = {
         output: message,
-        counter: greetedNames.length
-    }
+        count : counter
+    };
     res.render('greetings', data);
+  });
 });
 
 app.get('/greetings', function(req, res) {
@@ -130,6 +184,7 @@ var server = app.listen(process.env.PORT || 5000, function() {
     console.log('App starts at http://%s:%s', host, port);
 
 });
+
 
 //deploy using heroku
 

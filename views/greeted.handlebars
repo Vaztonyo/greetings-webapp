@@ -1,15 +1,18 @@
 {{>header}}
 
 <div class="greeted" align="center"><br><br><br></br>
-  <a href='/'>Greet more peeps</a>
-  <p><h1 align="center"><u>Names That Have Been Greeted:</u></h1></p><br>
-<tbody>
-  <h3>
-  {{#each name}}
-  <ul>{{this}}</ul>
+    <a href='/'>Greet more peeps</a>
+    <p>
+        <h1 align="center"><u>Names That Have Been Greeted:</u></h1></p><br>
+    <tbody class="namesGreeted">
+        <h3>
+  {{#each greetings}}
+  <a href="/greeted/{{name}}">
+    {{name}}
+  </a><br>
   {{/each}}
 </h3>
-</tbody>
+    </tbody>
 </div>
 
 {{>footer}}

@@ -3,32 +3,38 @@
 <br><br><br><br></br>
 
 <div class="input" align="center">
-<form class="" action="/" method="post">
-  <p class="counter" name="counter"><label for="counter">Counter:</label>{{counter}}</p><br>
+    <form class="" action="/" method="post">
+        <p class="counter" name="counter"><label for="counter">Counter: </label> {{count}}</p><br>
 
-  <a href="/greeted">View Greeted Names</a><br><br>
-    <input type="text" class="name" name="id" placeholder="Enter Your Name" value=""></input><br><br>
+        <a href="/greeted">View Greeted Names</a><br><br>
+        <input type="text" class="name" name="id" placeholder="Enter Your Name" value=""></input><br><br>
 
-    <label class="radio-inline">
+        <label class="radio-inline">
       <input type="radio" class="lang" name="language" value="english"><b>English
     </label>
-    <label class="radio-inline">
+        <label class="radio-inline">
       <input type="radio" class="lang"name="language" value="afrikaans"><b>Afrikaans</b>
     </label>
-    <label class="radio-inline">
+        <label class="radio-inline">
       <input type="radio" class="lang" name="language" value="xhosa"><b>Xhosa</b>
     </label><br><br>
 
-    <input type="submit" class="greetButton" name="submit" value="Submit"></input><br><br><br></br>
+        <input type="submit" class="myButton" name="submitBtn" value="Submit"></input>
+        <input type="submit" class="myButton" name="resetBtn" value="Reset"></input><br><br><br></br>
 
-  </form>
-  <p class="outp">{{output}}</p><br>
+    </form>
+    <p class="outp">{{output}}</p><br>
 
-  {{#if messages.error}}
-  <div class="msg1">
-    {{messages.error}}
-  </div>
-  {{/if}}
+    {{#if messages.error}}
+        <div class="msg1">
+            {{messages.error}}
+        </div>
+    {{/if}}
+    {{#if messages.success}}
+        <div class="msg1">
+            {{messages.success}}
+        </div>
+    {{/if}}
 </div><br><br></br>
 
 {{>footer}}
