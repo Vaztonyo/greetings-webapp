@@ -4,10 +4,10 @@ html, body {
     background: linear-gradient(to left, lightblue, lightblue, silver, silver);
 }
 
-body{
-  height: auto;
-  display: inline;
-  word-wrap: break-word;
+body {
+    height: auto;
+    display: inline;
+    word-wrap: break-word;
 }
 
 footer {

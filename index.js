@@ -15,14 +15,7 @@ const models = Models(mongoURL);
 var app = express();
 
 app.set('trust proxy', 1) // trust first proxy
-app.use(session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        secure: true
-    }
-}))
+app.use(session({ secret: 'keyboard cat', cookie: { maxAge: 60000 * 30 }}));
 
 app.use(flash());
 
@@ -48,45 +41,47 @@ const NamesGreeted = models.Name;
 
 app.get('/', function(req, res, next) {
 
-  NamesGreeted.distinct('name', function(err, results){
-    if (sessionNames[0] !== undefined){
-      var lastName = sessionNames.length - 1;
-      var namesForGreetingb = sessionNames[lastName].name;
-    };
-    counter = results.length;
-    res.render('greetings', {
-      count : counter
-      });
+    NamesGreeted.distinct('name', function(err, results) {
+        if (sessionNames[0] !== undefined) {
+            var lastName = sessionNames.length - 1;
+            var namesForGreetingb = sessionNames[lastName].name;
+        };
+        counter = results.length;
+        res.render('greetings', {
+            count: counter
+        });
     });
 });
 
 app.get('/greeted', function(req, res, next) {
-    models.Name.find({}, function(err, greetings){
-      if (err){
-        return next(err);
-      }
-      res.render('greeted', {greetings});
+    models.Name.find({}, function(err, greetings) {
+        if (err) {
+            return next(err);
+        }
+        res.render('greeted', {
+            greetings
+        });
     });
 });
 
 app.get('/greeted/:name', function(req, res, next) {
-  NamesGreeted.findOne({
-    name: req.params.name
-  }, function(err, greetings){
-    if (err) {
-      return next(err);
-    } else {
-      if (greetings) {
-        var resultOfSearchedName = 'Hi, ' + greetings.name + ". You have been greeted " + greetings.individualCount + ' time(s).'
-      } else {
-        var resultOfSearchedName = "Oops!, we don't know this person!"
-      }
-    }
+    NamesGreeted.findOne({
+        name: req.params.name
+    }, function(err, greetings) {
+        if (err) {
+            return next(err);
+        } else {
+            if (greetings) {
+                var resultOfSearchedName = 'Hi, ' + greetings.name + ". You have been greeted " + greetings.individualCount + ' time(s).'
+            } else {
+                var resultOfSearchedName = "Oops!, we don't know this person!"
+            }
+        }
 
-    res.render('counter', {
-      resultOfSearchedName
+        res.render('counter', {
+            resultOfSearchedName
+        });
     });
-  });
 });
 
 
@@ -96,7 +91,9 @@ app.post('/', function(req, res, next) {
         name: req.body.id
     };
 
-    sessionNames.push({enteredName});
+    sessionNames.push({
+        enteredName
+    });
 
     var submit = req.body.submitBtn;
     var reset = req.body.resetBtn;
@@ -121,55 +118,53 @@ app.post('/', function(req, res, next) {
 
     if (submit && requiredVal) {
 
-    NamesGreeted.findOne({
-      name: req.body.id
-    }, function(err, searchName) {
-      if (err) {
-        return next(err)
-      } else {
-        if (!searchName && (req.body.id !== "")) {
-          var newName = new NamesGreeted({
-            name: req.body.id,
-            individualCount: 1
-          });
-          newName.save(function(err, results) {
-            if (err) {
-              return next(err);
-            }
-            console.log('results', results);
-          })
-        } else {
-
-          NamesGreeted.update({
+        NamesGreeted.findOne({
             name: req.body.id
-          }, {
-            $inc: {
-              individualCount: 1
+        }, function(err, searchName) {
+            if (err) {
+                return next(err)
+            } else {
+                if (!searchName && (req.body.id !== "")) {
+                    var newName = new NamesGreeted({
+                        name: req.body.id,
+                        individualCount: 1
+                    });
+                    newName.save(function(err, results) {
+                        if (err) {
+                            return next(err);
+                        }
+                        console.log('results', results);
+                    })
+                } else {
+
+                    NamesGreeted.update({
+                        name: req.body.id
+                    }, {
+                        $inc: {
+                            individualCount: 1
+                        }
+                    }, function(err) {
+                        if (err) {}
+                    });
+                }
             }
-          }, function(err) {
-            if (err) {}
-          });
-        }
-      }
-    });
+        });
 
-  }
-
-else  if (reset) {
-    NamesGreeted.remove({}, function(err){
-      if(err){
-        return next(err);
-      }
-    });
-  }
+    } else if (reset) {
+        NamesGreeted.remove({}, function(err) {
+            if (err) {
+                return next(err);
+            }
+        });
+    }
     models.Name.count(function(err, counter) {
 
-    var data = {
-        output: message,
-        count : counter
-    };
-    res.render('greetings', data);
-  });
+        var data = {
+            output: message,
+            count: counter
+        };
+        res.render('greetings', data);
+    });
 });
 
 app.get('/greetings', function(req, res) {
